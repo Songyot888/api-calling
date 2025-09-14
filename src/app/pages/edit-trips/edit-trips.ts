@@ -29,12 +29,11 @@ import { lastValueFrom } from 'rxjs';
 export class EditTrips implements OnInit {
   id: string | undefined | null = null;
   trip!: TripGetResponse;
-  selectedTrip?: TripGetResponse;
+
+
   idx: number = 0;
   countries: any[] = [];
   selectcountry: string = '';
-  dataTrip!: TripGetResponse;
-  originalTrip: TripGetResponse | null = null;
 
   distinations: Destination[] = [
     { value: 1, name: 'เอเชีย' },
@@ -48,64 +47,51 @@ export class EditTrips implements OnInit {
     private tripservice: Trip,
     private route: ActivatedRoute
   ) {}
+
   ngOnInit(): void {
     this.loaddata();
   }
+
   async editTrip() {
     this.id = this.route.snapshot.paramMap.get('idx');
-    const o = this.originalTrip;
-    console.log("ooo="+
-      
-      o);
-    
     if (!this.id) {
       console.error('Trip id is null or undefined.');
       return;
     }
 
-    // ดึงข้อมูลปัจจุบันจาก API
     const trips = await this.tripservice.getTripid(this.id);
-    const tripData = Array.isArray(trips) ? trips[0] : trips;
+    const current: TripGetResponse = Array.isArray(trips) ? trips[0] : trips;
 
-    // รวมของเดิมกับของใหม่
-    const body = {
-      ...tripData, // ข้อมูลเก่า
-      ...this.trip, // ของที่ผู้ใช้แก้ (ทับของเดิม)
+
+    const body: any = {
+      name: this.trip?.name?.trim() || current.name,
+      country:
+        this.selectcountry?.trim() ||
+        this.trip?.country?.trim() ||
+        current.country,
+      destinationid: this.trip?.destinationid ?? current.destinationid,
+
+      coverimage: this.trip?.coverimage?.trim() || current.coverimage,
+      detail: this.trip?.detail?.trim() || current.detail,
+      price: this.trip?.price ?? current.price,
+      duration: this.trip?.duration ?? current.duration,
     };
 
-    // เรียก API update
-    await this.tripservice.edittrip(body, this.id);
-    console.log('อัปเดตสำเร็จ', body);
+    try {
+      var res = await this.tripservice.edittrip(this.id, body);
+      if (res) {
+        console.log('อัปเดตสำเร็จ', res);
+      } else {
+        console.log('อัปเดตไม่สำเร็จ', res);
+      }
+    } catch (error) {
+      console.log('อัปเดตไม่สำเร็จ', error);
+    }
   }
-  // async editTrip() {
-  //   const body = {
-  //      name: this.name?.trim() || o?.name,
-  //     country: this.country?.trim() || o?.country || null,
-  //     destinationid: this.destinationId,
-  //     coverimage: this.cover?.trim() || o?.coverimage,
-  //     detail: this.detail?.trim() || o?.detail,
-  //     price: this.price ?? o?.price,
-  //     duration: this.duration ?? o?.duration,
-  //   };
-  //   this.id = this.route.snapshot.paramMap.get('idx');
-  //   // this.selectedTrip = this.trip.find((d) => String(d.idx) === this.id);
 
-  //   // const url = 'http://localhost:3000/trip/$`select';
-  //   if (this.id) {
-  //     const trips = await this.tripservice.getTripid(this.id);
-  //     const tripData = trips[0];
-  //     let merge = { ...tripData, ...body }
-  //     console.log(merge);
-
-  //     // const response = this.tripservice.edittrip(body, this.id);
-  //     // console.log(response);
-  //   } else {
-  //     console.error('Trip id is null or undefined.');
-  //   }
-  // }
   async loaddata() {
     this.id = this.route.snapshot.paramMap.get('idx');
-    if (this.id !== null) {
+    if (this.id != null) {
       const trips = await this.tripservice.getTripid(this.id);
       this.trip = Array.isArray(trips) ? trips[0] : trips;
     } else {
@@ -113,21 +99,10 @@ export class EditTrips implements OnInit {
       console.error('Trip id is null.');
     }
 
-    console.log(this.trip);
-    const allTrip = await this.tripservice.getTrip(); // API endpoint
+    const allTrip = await this.tripservice.getTrip();
     this.countries = [...new Set(allTrip.map((t: any) => t.country))].map(
-      (c: string) => ({
-        value: c,
-        name: c,
-      })
+      (c: string) => ({ value: c, name: c })
     );
-    // this.countries = [
-    //   {
-    //     value: this.trip.country,
-    //     name: this.trip.country,
-    //   },
-    // ];
-    console.log(this.countries);
   }
 }
 

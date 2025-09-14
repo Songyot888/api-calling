@@ -44,7 +44,7 @@ export class Trip {
   }
   public async edittrip(id:any,body:any)
   {
-     const url = this.constants.API_ENDPOINT + 'trip/' + id;
+     const url = this.constants.API_ENDPOINT + '/trip/' + id;
     try {
       const response = await lastValueFrom(this.http.put(url, body));
       return response;
