@@ -30,7 +30,6 @@ export class EditTrips implements OnInit {
   id: string | undefined | null = null;
   trip!: TripGetResponse;
 
-
   idx: number = 0;
   countries: any[] = [];
   selectcountry: string = '';
