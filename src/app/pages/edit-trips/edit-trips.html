@@ -1,0 +1,48 @@
+<div *ngIf="trip as t" class="container"> 
+  <mat-form-field appearance="outline">
+    <mat-label>{{ t.name }}</mat-label>
+    <input matInput [(ngModel)]="t.name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" >
+    <mat-label>{{ t.destination_zone }}</mat-label>
+    <mat-select [(ngModel)]="distinations">
+      <mat-option *ngFor="let distination of distinations" [value]="distination.value">
+        {{ distination.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" >
+    <mat-label>{{ t.country }}</mat-label>
+    <mat-select [(ngModel)]="selectcountry" name="country">
+      <mat-option *ngFor="let c of countries" [value]="c.value">
+        {{ c.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" >
+    <mat-label>Coverimage</mat-label>
+    <input matInput [(ngModel)]="t.coverimage" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" >
+    <mat-label>Detail</mat-label>
+    <input matInput [(ngModel)]="t.detail" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" >
+    <mat-label>Price</mat-label>
+    <input matInput [(ngModel)]="t.price" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" >
+    <mat-label>Duration</mat-label>
+    <input matInput [(ngModel)]="t.duration" />
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="editTrip()" >
+    Save
+  </button>
+</div>

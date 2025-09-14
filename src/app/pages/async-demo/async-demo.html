@@ -1,0 +1,23 @@
+<p>
+  <mat-form-field appearance="outline" style="padding-left: 20px">
+    <input matInput #keyword placeholder="idx trips" />
+  </mat-form-field>
+  <button class="button" color="primary" (click)="findOne(keyword)">
+    FindOne
+  </button>
+  <button class="button" color="primary" (click)="callApi()">Call API</button>
+  <mat-form-field appearance="outline" style="padding-left: 20px">
+    <input matInput #keywordname placeholder="name trips" />
+  </mat-form-field>
+  <button class="button" color="primary" (click)="findname(keywordname)">
+    Findname
+  </button>
+  <button class="button" color="primary" (click)="callApi()">Call API</button>
+</p>
+<div class="trips">
+  <div class="content" *ngFor="let trip of trips">
+    <h2>{{ trip.name }}</h2>
+    <h4>{{ trip.country }}</h4>
+    <img [src]="trip.coverimage" alt="" />
+  </div>
+</div>

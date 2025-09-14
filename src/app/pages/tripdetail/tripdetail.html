@@ -1,0 +1,10 @@
+<div *ngFor="let dt of trip">
+<button (click)="goEdit(dt.idx)">edit</button>
+<h2>รายละเอียดทริป </h2>
+<h2>{{ dt.name }}</h2>
+<img [src]="dt.coverimage" alt="">
+<h3>{{dt.price}} ,{{dt.country}}</h3>
+<p>
+    {{dt.detail}}
+</p>
+</div>
